@@ -60,6 +60,41 @@ Clean the demographics data so that summaries of age and gender can be made in t
 
 #dat_age_gender <- data_demographics_raw 
 
+#wrangle the demographics data out of the row
+dat_age_gender <- data_demographics_raw %>%
+  #select colums
+  select(subject,trialcode,response) %>%
+  #rename for clarity
+  rename(unique_id=subject,item= trialcode, response= response) %>%
+  #retain row that we need
+  filter(item =="age")
+
+temp<- dat_age_gender %>% 
+  filter(item =="age")
+
+temp<- dat_age_gender %>% 
+  distinct(response)
+
+sapply(dat_age_gender, class)
+
+temp2<- dat_age_gender %>% 
+  #create change variables
+  mutate(unique_id_2= unique_id *2)%>%
+  mutate(unique_id= unique_id_2) 
+
+
+temp2<- dat_age_gender %>% 
+  #remove non number from age 
+  mutate(response = str_remove_all(response,"[\\D]"),response= na_if(response,""))
+?na_if
+
+
+
+
+#library(stringer) --> complexer würd es auch erkennen wenn nicht ganz genau gleich 
+# | =or
+#& = and
+
 ```
 
 # Exclusions / data quality
