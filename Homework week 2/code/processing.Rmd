@@ -90,15 +90,40 @@ temp2<- dat_age_gender %>%
 
 
 
-
 #library(stringer) --> complexer würd es auch erkennen wenn nicht ganz genau gleich 
 # | =or
 #& = and
 
 
 # Homework:
+library(stringr)
 
-dat_age_gender
+dat_gender <- data_demographics_raw %>%
+  #select colums
+  select(subject,trialcode,response) %>%
+  #rename for clarity
+  rename(unique_id=subject,item= trialcode,gender= response) %>%
+  #retain row that we need
+  filter(item =="gender") %>%
+  #remove numbers put NA
+  mutate(gender = str_remove_all(gender,"[0-9]"),gender= na_if(gender,"")) %>%
+  # Entferne Leerzeichen und wandle in Kleinbuchstaben um
+  mutate(gender = str_trim(tolower(gender)) %>%
+  # ersetze: Erlaubte Werte in gender mit %in% kennzeichnen
+    mutate(gender = replace(gender, !(gender %in% c("men", "woman", "male", "female", "non-binary", "non 
+                                                    binary")),NA_character_)) %>%
+    mutate(gender = ifelse(gender %in% c("man", "male", "men",), "male"),
+                         ifelse(gender %in% c("woman", "female",), "female", 
+                                ifelse(Gender%in% c("non-binary", "nonbinary"), "non binary")))
+    
+    
+         
+  
+
+
+
+
+
 
 ```
 
